@@ -387,6 +387,14 @@ func (ec *Client) SubscribeFilterLogs(ctx context.Context, q ethereum.FilterQuer
 	return ec.c.EthSubscribe(ctx, ch, "logs", arg)
 }
 
+func (ec *Client) SubscribePendingTransactions(ctx context.Context, q ethereum.FilterQuery, ch chan<- interface{}) (ethereum.Subscription, error) {
+	arg, err := toFilterArg(q)
+	if err != nil {
+		return nil, err
+	}
+	return ec.c.EthSubscribe(ctx, ch, "alchemy_newFullPendingTransactions", arg)
+}
+
 func toFilterArg(q ethereum.FilterQuery) (interface{}, error) {
 	arg := map[string]interface{}{
 		"address": q.Addresses,
